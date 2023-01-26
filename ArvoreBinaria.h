@@ -6,17 +6,17 @@
 #include <string.h>
 
 struct noArvore {
-    char* simbolo;
+    char simbolo [100];
     int frequencia;
     struct noArvore * esq; // subárvore esquerda
     struct noArvore * dir; // subárvore direita
 };
 
-typedef struct noArvore* arvore; //árvore é um ponteiro para um nó
-
 // Testa se uma árvore é vazia
-int ehVaziaArvore(arvore r);
+int ehVaziaArvore(struct noArvore* a);
 
+int ehFolha(struct noArvore* a);
 
+struct noArvore* insereArvoreBinaria(struct noArvore* a, char simbolo[], int frequencia);
 
 #endif //PAA_TRAB1_ARVOREBINARIA_H

@@ -4,40 +4,40 @@
 // tipoCod é para determinar se vai codificar por letra ou palavra
 // 1 — Letra
 // 0 — palavra
-ListaArvore* determinarFrequencia(char* buffer, int tipoCod){
-    ListaArvore *lAux = NULL, *lAuxBusca = NULL;
-    arvore noAux;
+struct noListaArvore* determinarFrequencia(char* buffer, int tipoCod){
+    struct noListaArvore *lAux = NULL, *lAuxBusca = NULL;
+    char bAux[2] = " \0";
+    struct noArvore* noAux = NULL;
     if(tipoCod) {
-        while ( buffer[0] ) {
-            lAuxBusca = buscaLista(lAux, &buffer[0]);
-            if(lAux != NULL)
-                lAuxBusca->no.frequencia++;
+        while ( *buffer != '\0' ) {
+            bAux[0] = *buffer;
+            lAuxBusca = buscaListaArvore(lAux, bAux);
+            if(lAuxBusca != NULL)
+                lAuxBusca->a->frequencia++;
             else {
-                noAux->simbolo = &buffer[0];
-                noAux->frequencia = 1;
-                lAux = insereLista(lAux, noAux);
+                noAux = NULL;
+                noAux = insereArvoreBinaria(noAux, bAux, 1);
+                lAux = insereListaArvore(lAux, noAux);
             }
             ++buffer;
         }
     } else {
-        char *bAux = NULL;
-        while (buffer){
-            sscanf(buffer, "%s", bAux);
-            buffer += sizeof(bAux);
-            lAuxBusca = buscaLista(lAux, bAux);
+        char *bAux2 = NULL;
+        while (*buffer != '\0'){
+            sscanf(buffer, "%s", bAux2);
+            lAuxBusca = buscaListaArvore(lAux, bAux2);
             if(lAux != NULL)
-                lAuxBusca->no.frequencia++;
+                lAuxBusca->a->frequencia++;
             else {
-                noAux->simbolo = bAux;
+                strcpy(noAux->simbolo,bAux2);
                 noAux->frequencia = 1;
-                lAux = insereLista(lAux, noAux );
+                lAux = insereListaArvore(lAux, noAux);
             }
-            if (*buffer == EOF)
+            buffer += sizeof(bAux2);
+            if (*buffer == '\0')
                 break;
             else {
-                noAux->simbolo = &buffer[0];
-                noAux->frequencia = 1;
-                lAux = insereLista(lAux, noAux);
+                lAux = determinarFrequencia(" ",1);
             }
         }
     }
@@ -46,31 +46,84 @@ ListaArvore* determinarFrequencia(char* buffer, int tipoCod){
 }
 
 // Organiza a lista conforme a frequência de cada símbolo.
-ListaArvore* organizaFrequencia (ListaArvore *l){
-    ListaArvore *lAux = NULL;
-    while (!ehVazioLista(l)){
-        lAux = insereLista(lAux,&(l->no));
-        l = retiraCabecaLista(l);
+struct noListaArvore* organizaFrequencia (struct noListaArvore *l){
+    struct noListaArvore *lAux = NULL;
+    while (!ehVazioNoListaArvore(l)){
+        lAux = insereListaArvore(lAux, l->a);
+        l = retiraCabecaListaArvore(l);
     }
     return lAux;
 }
 
 
 // Monta a árvore binária a partir de uma lista, agrupando símbolos conforme a frequência.
-// Pré-condição: lista de frequência organizada.
-// Pós-condição: lista não existe mais, retorna a árvore das frequências.
-arvore montaArvore(ListaArvore *l) {
-    arvore aAux = (arvore)malloc(sizeof(arvore));
-    while (tamanhoLista(l) > 1){
-        aAux->esq = (arvore)realloc(aAux->esq,sizeof(l->no));
-        aAux->esq = &(l->no);
-        l = retiraCabecaLista(l);
-        aAux->dir = (arvore)realloc(aAux->dir,sizeof(l->no));
-        aAux->dir = &(l->no);
-        l = retiraCabecaLista(l);
+// Pré-condição: parâmetro l de frequência organizada.
+// Pós-condição: parâmetro l não existe mais, retorna a árvore das frequências.
+// TODO;
+struct noArvore* montaArvore(struct noListaArvore *l) {
+    struct noArvore* aAux;
+    while (tamanhoListaArvore(l) > 1){
+        aAux = (struct noArvore*)malloc(sizeof(struct noArvore));
+        aAux->esq = l->a;
+        l = retiraCabecaListaArvore(l);
+        aAux->dir = l->a;
+        l = retiraCabecaListaArvore(l);
         aAux->frequencia = aAux->dir->frequencia + aAux->esq->frequencia;
-        l = insereLista(l,aAux);
+        strcpy(aAux->simbolo,"\0");
+        l = insereListaArvore(l, aAux);
+        free(aAux);
     }
+    aAux = l->a;
     free(l);
     return aAux;
+}
+
+// Percorre a árvore utilizando o algoritmo de busca em profundidade (DFS) para obter uma tabela de frequências, no formato de uma lista.
+void determinaFrequenciaDFS(struct noArvore* a, char* caminho, int tamCaminho, struct NoListaSimples* l){
+    if(ehVaziaArvore(a))
+        return;
+    if(ehFolha(a)) {
+        l = insereListaSimples(l,a->simbolo,caminho);
+    } else {
+        caminho = realloc(caminho, tamCaminho + 1);
+        caminho[tamCaminho] = '0';
+        determinaFrequenciaDFS(a->esq, caminho, ++tamCaminho, l);
+        caminho[tamCaminho] = '1';
+        determinaFrequenciaDFS(a->dir, caminho, ++tamCaminho, l);
+    }
+}
+
+// A partir da árvore de frequência, codifica a frase buffer.
+// tipoCod é para determinar se vai codificar por letra ou palavra
+// 1 — Letra
+// 0 — palavra
+// Pré-condição: Tomar cuidado com o parâmetro lFreq.
+char* codificaHuffman (char* buffer, struct noArvore* a, int tipoCod, struct NoListaSimples *lFreq) {
+    char* codigo = NULL, *bAux = NULL;
+    struct NoListaSimples *lAux = NULL;
+    if(*buffer == '\0')
+        return "\0";
+    if(tipoCod) {
+        *bAux = *buffer;
+        lAux = buscaListaSimples(lFreq, bAux);
+        if (lAux == NULL) {
+            determinaFrequenciaDFS(a, NULL, 0, lFreq);
+            lAux = buscaListaSimples(lFreq, bAux);
+        }
+        codigo = strcat(lAux->frequencia, codificaHuffman(++buffer, a, tipoCod, lFreq));
+        return codigo;
+    } else {
+        sscanf(buffer, "%s", bAux);
+        lAux = buscaListaSimples(lFreq, bAux);
+        if (lAux == NULL) {
+            determinaFrequenciaDFS(a, NULL, 0, lFreq);
+            lAux = buscaListaSimples(lFreq, bAux);
+        }
+        codigo = lAux->frequencia;
+        if(*(buffer + sizeof(bAux)) == ' ') {
+            codigo = strcat(codigo, codificaHuffman(" ", a, 1, lFreq)); // Considerando os espaços.
+            codigo = strcat(codigo, codificaHuffman(buffer += sizeof(bAux + 1), a, tipoCod, lFreq));
+        }
+        return codigo;
+    }
 }

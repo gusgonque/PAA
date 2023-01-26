@@ -7,21 +7,21 @@
 #include "ArvoreBinaria.h"
 
 
-typedef struct noLista { //estrutura para lista encadeada após organizar as frequências
-    struct noArvore no;
-    struct noLista * prox; // ponteiro para próximo elemento
-} ListaArvore;
+struct noListaArvore{ //estrutura para lista encadeada após organizar as frequências
+    struct noArvore* a;
+    struct noListaArvore* prox; // ponteiro para próximo elemento
+};
 
-ListaArvore* criaNoLista(arvore no);
+struct noListaArvore* criaNoListaArvore(struct noArvore* a);
 
-int ehVazioLista(ListaArvore* l);
+int ehVazioNoListaArvore(struct noListaArvore *l);
 
-ListaArvore *insereLista(ListaArvore *l, arvore no);
+struct noListaArvore *insereListaArvore(struct noListaArvore *l, struct noArvore* a);
 
-ListaArvore * retiraCabecaLista(ListaArvore* l);
+struct noListaArvore * retiraCabecaListaArvore(struct noListaArvore* l);
 
-int tamanhoLista(ListaArvore* l);
+int tamanhoListaArvore(struct noListaArvore* l);
 
-ListaArvore* buscaLista(ListaArvore* l, char* buffer);
+struct noListaArvore* buscaListaArvore(struct noListaArvore* l, char* buffer);
 
 #endif //PAA_TRAB1_LISTAARVORE_H
