@@ -6,17 +6,19 @@
 #include <string.h>
 
 struct noArvore {
-    char simbolo [100];
+    char * simbolo;
     int frequencia;
     struct noArvore * esq; // subárvore esquerda
     struct noArvore * dir; // subárvore direita
 };
 
+struct noArvore *criaArvoreSimbolos();
+
+void insereSimboloArvore(struct noArvore * arvore, char * simbolo, int frequencia);
+
 // Testa se uma árvore é vazia
 int ehVaziaArvore(struct noArvore* a);
 
 int ehFolha(struct noArvore* a);
-
-struct noArvore* insereArvoreBinaria(struct noArvore* a, char simbolo[], int frequencia);
 
 #endif //PAA_TRAB1_ARVOREBINARIA_H

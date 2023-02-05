@@ -13,7 +13,7 @@ ter caracteres acentuados (ã, õ, ô, ç, á, à, ...), de tamanho da ordem de 
 clássico.
 5. na codificação por palavras: considerar cada palavra diferente do texto como um símbolo, contar suas
 frequências e gerar uma codificação de Huffman para as palavras.
-6. criar estruturas de dados adequadas para representação e armazenamento da codificação noListaArvore próprio
+6. criar estruturas de dados adequadas para representação e armazenamento da codificação noListaAlfabeto próprio
 arquivo compactado tal que permita a operação de descompressão.
 7. entregar um relatório contendo:
 • estudo comparativo da taxa de compressão obtida usando codificação por caracter com a obtida

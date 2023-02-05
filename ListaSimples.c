@@ -3,7 +3,7 @@
 struct NoListaSimples* insereListaSimples(struct NoListaSimples* l, char* simbolo, char* frequencia) {
     struct NoListaSimples* aux = (struct NoListaSimples*) malloc(sizeof(struct NoListaSimples));
     strcpy(aux->simbolo,simbolo);
-    strcpy(aux->frequencia,frequencia);
+    strcpy(aux->codigo, frequencia);
     aux->prox = l; //encadeia com a cabeça da lista
     return aux;// retorna a nova cabeça
 }

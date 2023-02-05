@@ -7,7 +7,7 @@
 
 struct NoListaSimples { //estrutura para lista encadeada
     char * simbolo;
-    char * frequencia;
+    char * codigo;
     struct NoListaSimples * prox; // ponteiro para próximo elemento
 } ;
 
