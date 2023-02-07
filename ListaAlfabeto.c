@@ -12,26 +12,21 @@ int ehVazioNoAlfabeto(struct noListaAlfabeto *l){
 }
 
 struct noListaAlfabeto *insereAlfabeto(struct noListaAlfabeto *l, struct noArvore *a) {
-    struct noListaAlfabeto * lAux = buscaListaArvore(l, a->simbolo);
-    if (ehVazioNoAlfabeto(lAux)){
-        lAux = criaNoAlfabeto();
-        insereSimboloArvore(lAux->arvore,a->simbolo,a->frequencia);
-        if(!ehVazioNoAlfabeto(l->prox) && lAux->arvore->frequencia > l->arvore->frequencia) {
-            l->prox = insereAlfabeto(l->prox, lAux->arvore);
-            return l;
-        }
-        lAux->prox = l;
-    } else {
-        lAux->arvore->frequencia ++;
-    }
-
-    if (!ehVazioNoAlfabeto(lAux->prox) && lAux->arvore->frequencia > lAux->prox->arvore->frequencia) { // Muda a cabeça, colocando a frequência maior no final.
-        struct noListaAlfabeto * lAux2 = criaNoAlfabeto();
-        insereSimboloArvore(lAux2->arvore,lAux->arvore->simbolo,lAux->arvore->frequencia);
-        lAux = retiraCabecaListaAlfabeto(lAux);
-        lAux = insereAlfabeto(lAux, lAux2->arvore);
-    }
+    struct noListaAlfabeto * lAux = criaNoAlfabeto();
+    insereSimboloArvore(lAux->arvore, a->simbolo, a->frequencia);
+    lAux->prox = l; // Muda a cabeça.
     return lAux;
+}
+
+struct noListaAlfabeto * organizaAlfabeto (struct noListaAlfabeto* l){
+    if(!ehVazioNoAlfabeto(l) && !ehVazioNoAlfabeto(l->prox) && l->arvore->frequencia > l->prox->arvore->frequencia){
+        struct noArvore * aAux = criaArvoreSimbolos();
+        insereSimboloArvore(aAux,l->arvore->simbolo,l->arvore->frequencia);
+        l = retiraCabecaListaAlfabeto(l);
+        l->prox = insereAlfabeto(l->prox, aAux);
+        l->prox = organizaAlfabeto(l->prox);
+    }
+    return l;
 }
 
 struct noListaAlfabeto* retiraCabecaListaAlfabeto(struct noListaAlfabeto* l) {

@@ -18,6 +18,8 @@ int ehVazioNoAlfabeto(struct noListaAlfabeto *l);
 
 struct noListaAlfabeto *insereAlfabeto(struct noListaAlfabeto *l, struct noArvore *a);
 
+struct noListaAlfabeto * organizaAlfabeto (struct noListaAlfabeto* l);
+
 struct noListaAlfabeto * retiraCabecaListaAlfabeto(struct noListaAlfabeto* l);
 
 int tamanhoListaArvore(struct noListaAlfabeto* l);

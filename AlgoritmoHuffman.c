@@ -6,25 +6,31 @@
 // 0 — palavra
 struct noListaAlfabeto* determinaAlfabeto(char* buffer, int tipoCod){
     int i;
-    struct noListaAlfabeto* lAux = criaNoAlfabeto();
+    struct noListaAlfabeto* lAux = criaNoAlfabeto(), *lAuxBusca;
     struct noArvore* aAux = criaArvoreSimbolos();
     char strAux[50];
-    if(tipoCod){
-        for ( i = 0 ; i < strlen(buffer) ; ++i ) {
-            sscanf((buffer+i), "%c", strAux);
-            insereSimboloArvore(aAux,strAux,1);
-            lAux = insereAlfabeto(lAux, aAux);
-        }
-    } else {
-        for ( i = 0 ; i < strlen(buffer) ; ++i ) {
-            while(buffer[i] == ' ' || buffer[i] == '\n') {
+    char * strBuffer;
+    for ( i = 0 ; i < strlen(buffer) ; i++ ) {
+        strBuffer = buffer+i;
+        if (tipoCod) {
+            sscanf((strBuffer), "%c", strAux);
+            lAuxBusca = buscaListaArvore(lAux, strAux);
+            if (ehVazioNoAlfabeto(lAuxBusca)) {
+                insereSimboloArvore(aAux, strAux, 1);
+                lAux = insereAlfabeto(lAux, aAux);
+            } else {
+                lAuxBusca->arvore->frequencia++;
+                lAuxBusca = organizaAlfabeto(lAuxBusca);
+            }
+        } else {
+            while (buffer[i] == ' ' || buffer[i] == '\n') {
                 sscanf((buffer + i), "%c", strAux);
-                insereSimboloArvore(aAux,strAux,1);
+                insereSimboloArvore(aAux, strAux, 1);
                 lAux = insereAlfabeto(lAux, aAux);
                 ++i;
             }
-            sscanf((buffer+i), "%s", strAux);
-            insereSimboloArvore(aAux,strAux,1);
+            sscanf((buffer + i), "%s", strAux);
+            insereSimboloArvore(aAux, strAux, 1);
             lAux = insereAlfabeto(lAux, aAux);
         }
     }
