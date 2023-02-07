@@ -11,11 +11,28 @@ int ehVazioNoAlfabeto(struct noListaAlfabeto *l){
     return (l == NULL || ehVaziaArvore(l->arvore));
 }
 
+// TODO: essa função e a organiza.
 struct noListaAlfabeto *insereAlfabeto(struct noListaAlfabeto *l, struct noArvore *a) {
-    struct noListaAlfabeto * lAux = criaNoAlfabeto();
-    insereSimboloArvore(lAux->arvore, a->simbolo, a->frequencia);
-    lAux->prox = l; // Muda a cabeça.
-    return lAux;
+    struct noListaAlfabeto * lAuxBusca = buscaListaArvore(l, a->simbolo), * lAux = criaNoAlfabeto();
+    if(!ehVazioNoAlfabeto(lAuxBusca)){
+        lAuxBusca->arvore->frequencia ++;
+        if(!ehVazioNoAlfabeto(lAuxBusca->prox)) {
+            lAux = l;
+            while (lAux->prox != lAuxBusca)
+                lAux = lAux->prox;
+            // Agora temos 3 nós do Alfabeto, l é a cabeça, lAuxBusca é onde está o nó para reorganizar o alfabeto, e lAux é o anterior de lAuxBusca.
+            if (lAuxBusca->arvore->frequencia > lAuxBusca->prox->arvore->frequencia){
+                lAuxBusca = retiraCabecaListaAlfabeto(lAuxBusca);
+                lAuxBusca->prox = insereAlfabeto(lAuxBusca->prox, a);
+                lAux->prox = lAuxBusca;
+            }
+        }
+        return l;
+    } else {
+        insereSimboloArvore(lAux->arvore, a->simbolo, a->frequencia);
+        lAux->prox = l; // Muda a cabeça.
+        return lAux;
+    }
 }
 
 struct noListaAlfabeto * organizaAlfabeto (struct noListaAlfabeto* l){
