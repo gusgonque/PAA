@@ -33,7 +33,9 @@ int main() {
 
     FILE *arq = fopen("test.txt","r");
     if (arq == NULL)
-        printf("Nao foi posivel abrir o arquivo")
+        printf("Nao foi posivel abrir o arquivo");
+
+    Grafo *gAux = carregaGrafo(arq);
 
     return 0;
 }

@@ -1,7 +1,7 @@
 #include "Grafos.h"
 
 Grafo *criaGrafo(){
-    Grafo *gAux = malloc(sizeof(Grafo));
+    Grafo *gAux = (Grafo *) malloc(sizeof(Grafo));
     gAux->listaVertices = NULL;
     gAux->listaArestas = NULL;
     gAux->numVertices = 0;
@@ -10,7 +10,7 @@ Grafo *criaGrafo(){
 }
 
 ListaAresta *criaListaAresta(){
-    ListaAresta *lAux = malloc(sizeof (ListaAresta));
+    ListaAresta *lAux = (ListaAresta *) malloc(sizeof (ListaAresta));
     lAux->prox = NULL;
     lAux->peso = 0;
     lAux->u = 0;
@@ -27,22 +27,30 @@ ListaAresta *insereListaAresta(ListaAresta *l, unsigned int u, unsigned int v, i
     return lAux;
 }
 
+// todo: fazer essa função
+ListaVertices **carregaVertices(Grafo g){
+
+}
+
 Grafo * carregaGrafo(FILE *arq) {
     Grafo *gAux = criaGrafo();
-    char strAux[3];
+    char *strAux = malloc(3*sizeof (char ));
 
-    fscanf(arq,"orientado=%3s\n",strAux); // todo: testar
+    fscanf(arq,"%*10c%3s%*c",strAux);
 
     gAux->orientacao = (strcmp(strAux,"sim") == 0);
 
-    fscanf(arq,"V=<%d>\n", &(gAux->numVertices)); // todo: testar
+
+    fscanf(arq,"%*2c%d%*c", &(gAux->numVertices));
 
     int peso;
     unsigned int u, v;
-    for (int i = 0; i < gAux->numVertices; ++i) {
-        fscanf(arq,"(<%u>,<%u>):<%d>\n", &u, &v, &peso); // todo: testar
+    while(feof(arq) == 0){
+        fscanf(arq,"%*c%u%*c%u%*2c%d%*c", &u, &v, &peso);
         gAux->listaArestas = insereListaAresta(gAux->listaArestas,u,v,peso);
     }
+
+//    gAux->listaVertices = carregaVertices(gAux);
 
     return gAux;
 }

@@ -34,6 +34,8 @@ ListaAresta *criaListaAresta();
 // Insere os dados de uma aresta, em um novo nó na lista passada como parâmetro. Retorna a nova cabeça da lista.
 ListaAresta *insereListaAresta(ListaAresta *l, unsigned int u, unsigned int v, int peso);
 
+// Carrega os dados do grafo, a partir do arquivo aberto.
+// Pré-condiçãp: arquivo dado pelo parâmetro arq, aberto.
 Grafo *carregaGrafo(FILE *arq);
 
 
