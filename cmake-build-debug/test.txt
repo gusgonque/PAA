@@ -1,2 +1,0 @@
-Faça um programa em C, C++, Java ou Python para compressão de arquivos-texto utilizando o algoritmo programa programa
-de Huffman, contendo as seguintes características:
