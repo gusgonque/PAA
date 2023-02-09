@@ -4,21 +4,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <wchar.h>
 
-struct noArvore {
-    char * simbolo;
+typedef struct noArvore {
+    wchar_t *simbolo;
     int frequencia;
-    struct noArvore * esq; // subárvore esquerda
-    struct noArvore * dir; // subárvore direita
-};
+    struct noArvore *esq; // subárvore esquerda
+    struct noArvore *dir; // subárvore direita
+} arvore;
 
-struct noArvore *criaArvoreSimbolos();
+// Cria um nó da estrutura arvore, já com um símbolo e frequência.
+arvore *criaArvoreSimbolos(wchar_t *simbolo, int frequencia);
 
-void insereSimboloArvore(struct noArvore * arvore, char * simbolo, int frequencia);
+// Retorna o ponteiro de um novo nó de árvore, uma cópia do parâmetro.
+arvore *insereSimboloArvore(arvore *a);
 
 // Testa se uma árvore é vazia
-int ehVaziaArvore(struct noArvore* a);
+// 1 - é vazio
+// 0 - não é vazio
+int ehVaziaArvore(struct noArvore *a);
 
-int ehFolha(struct noArvore* a);
+// Testa se um nó é folha
+// 1 - é folha
+// 0 - não é folha
+int ehFolha(struct noArvore *a);
+
+// Retorna a altura da árvore.
+int tamanhoArvore(arvore *a);
 
 #endif //PAA_TRAB1_ARVOREBINARIA_H

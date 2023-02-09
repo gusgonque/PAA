@@ -4,26 +4,37 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <wchar.h>
 #include "ArvoreBinaria.h"
 
 
-struct noListaAlfabeto{ //estrutura para lista encadeada após organizar as frequências
-    struct noArvore * arvore;
-    struct noListaAlfabeto * prox; // ponteiro para próximo elemento
-};
+typedef struct noListaAlfabeto{ //estrutura para lista encadeada após organizar as frequências
+    arvore *arvore;
+    struct noListaAlfabeto *prox; // ponteiro para próximo elemento
+} alfabeto;
 
-struct noListaAlfabeto* criaNoAlfabeto();
+// Cria um nó da estrutura alfabeto vazio e o retorna.
+alfabeto *criaNoAlfabeto();
 
-int ehVazioNoAlfabeto(struct noListaAlfabeto *l);
+// Testa se um alfabeto é vazio.
+// 1 - É vazio
+// 0 - Não é vaizo
+int ehVazioNoAlfabeto(alfabeto *l);
 
-struct noListaAlfabeto *insereAlfabeto(struct noListaAlfabeto *l, struct noArvore *a);
+// Insere o nó da arvore no alfabeto, ou criando um novo nó, ou substituindo um que já existe. O alfabeto fica organizado em ordem crescente de frequência.
+alfabeto* insereAlfabeto(alfabeto *l, arvore *a);
 
-struct noListaAlfabeto * organizaAlfabeto (struct noListaAlfabeto* l);
+// Reorganiza o alfabeto em ordem crescente de frequência, se necessário.
+// Pré-condição: lCabeça ser a cabeça do alfabeto. l é o nó que vai testar se é necessário mudança.
+alfabeto *organizaAlfabeto (alfabeto *lCabeca, alfabeto *l);
 
-struct noListaAlfabeto * retiraCabecaListaAlfabeto(struct noListaAlfabeto* l);
+// Retira a cabeça do alfabeto e substitui ela pelo próximo nó.
+alfabeto* retiraCabecaListaAlfabeto(alfabeto *l);
 
-int tamanhoListaArvore(struct noListaAlfabeto* l);
+// Retorna o tamanho do alfabeto.
+int tamanhoListaAlfabeto(alfabeto *l);
 
-struct noListaAlfabeto* buscaListaArvore(struct noListaAlfabeto* l, char* buffer);
+// Busca um símbolo no alfabeto e retorna ou o nó em que ele está, ou nulo caso não encontre.
+alfabeto* buscaListaArvore(alfabeto *l, wchar_t *buffer);
 
 #endif //PAA_TRAB1_LISTAALFABETO_H

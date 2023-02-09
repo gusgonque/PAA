@@ -1,25 +1,33 @@
 #include "ListaSimples.h"
 
-struct NoListaSimples* insereListaSimples(struct NoListaSimples* l, char* simbolo, char* frequencia) {
-    struct NoListaSimples* aux = (struct NoListaSimples*) malloc(sizeof(struct NoListaSimples));
-    strcpy(aux->simbolo,simbolo);
-    strcpy(aux->codigo, frequencia);
+listaSimples *insereListaSimples(listaSimples *l, wchar_t *simbolo, char *codigo) {
+    listaSimples *aux = (listaSimples*) malloc(sizeof(listaSimples));
+    aux->simbolo = malloc(sizeof(wcslen(simbolo)));
+    wcscpy(aux->simbolo,simbolo);
+    aux->codigo = malloc(sizeof(strlen(codigo)));
+    strcpy(aux->codigo, codigo);
     aux->prox = l; //encadeia com a cabeça da lista
     return aux;// retorna a nova cabeça
 }
 
-int ehVazioListaSimples(struct NoListaSimples* l){
+int ehVazioListaSimples(listaSimples *l){
     return (l==NULL);
 }
 
-struct NoListaSimples* buscaListaSimples (struct NoListaSimples* l, char* simbolo) {
-    struct NoListaSimples * lAux = l;
+listaSimples *buscaListaSimples (listaSimples *l, wchar_t *simbolo) {
+    listaSimples *lAux = l;
     while (!ehVazioListaSimples(lAux)){
-        if(strcmp(lAux->simbolo,simbolo) == 0)
-            break;
+        if(wcscmp(lAux->simbolo,simbolo) == 0)
+            return lAux;
         else
             lAux = lAux->prox;
     }
     return NULL;
 }
 
+int tamanhoListaSimple(listaSimples *l){
+    if(!ehVazioListaSimples(l))
+        return 1 + tamanhoListaSimple(l->prox);
+    else
+        return 0;
+}

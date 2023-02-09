@@ -1,30 +1,39 @@
 #include "ArvoreBinaria.h"
 
-struct noArvore * criaArvoreSimbolos() {
-    struct noArvore * aux = (struct noArvore *) malloc(sizeof (struct noArvore));
-    aux->simbolo = NULL;
-    aux->frequencia = 1;
-    aux->dir = NULL;
-    aux->esq = NULL;
-    return aux;
+arvore *criaArvoreSimbolos(wchar_t *simbolo, int frequencia) {
+    arvore *aAux = (arvore *) malloc(sizeof (arvore));
+    aAux->simbolo = malloc(sizeof (wcslen(simbolo)));
+    wcscpy(aAux->simbolo, simbolo);
+    aAux->frequencia = frequencia;
+    aAux->dir = NULL;
+    aAux->esq = NULL;
+    return aAux;
 }
 
-void insereSimboloArvore(struct noArvore * arvore, char * simbolo, int frequencia){
-    if(arvore->simbolo == NULL)
-        arvore->simbolo = malloc(sizeof (strlen(simbolo)));
-    strcpy(arvore->simbolo,simbolo);
-    arvore->frequencia = frequencia;
+arvore *insereSimboloArvore(arvore *a) {
+    arvore *aAux = criaArvoreSimbolos(a->simbolo, a->frequencia);
+    aAux->esq = a->esq;
+    aAux->dir = a->dir;
+    return aAux;
 }
 
-int ehVaziaArvore(struct noArvore* a) {
-    return (a == NULL || (a->simbolo == NULL && ehVaziaArvore(a->esq) && ehVaziaArvore(a->dir)));
+int ehVaziaArvore(arvore *a) {
+    return (a == NULL);
 }
 
-int ehFolha(struct noArvore* a) {
+int ehFolha(arvore *a) {
     if(ehVaziaArvore(a))
         return 0;
     if(ehVaziaArvore(a->esq) && ehVaziaArvore(a->dir))
         return 1;
     else
         return 0;
+}
+
+int tamanhoArvore(arvore *a){
+    if(!ehVaziaArvore(a)) {
+        int dir = tamanhoArvore(a->dir), esq = tamanhoArvore(a->esq);
+        return 1 + (dir > esq ? dir : esq);
+    }
+    return 0;
 }

@@ -1,69 +1,76 @@
 #include "ListaAlfabeto.h"
 
-struct noListaAlfabeto* criaNoAlfabeto(){
-    struct noListaAlfabeto* aux = (struct noListaAlfabeto*) malloc(sizeof(struct noListaAlfabeto));
-    aux->arvore = criaArvoreSimbolos();
+alfabeto *criaNoAlfabeto(){
+    alfabeto *aux = (alfabeto *) malloc(sizeof(alfabeto));
+    aux->arvore = NULL;
     aux->prox = NULL;
     return aux;
 }
 
-int ehVazioNoAlfabeto(struct noListaAlfabeto *l){
+int ehVazioNoAlfabeto(alfabeto *l){
     return (l == NULL || ehVaziaArvore(l->arvore));
 }
 
-// TODO: essa função e a organiza.
-struct noListaAlfabeto *insereAlfabeto(struct noListaAlfabeto *l, struct noArvore *a) {
-    struct noListaAlfabeto * lAuxBusca = buscaListaArvore(l, a->simbolo), * lAux = criaNoAlfabeto();
+alfabeto *insereAlfabeto(alfabeto *l, arvore *a) {
+    alfabeto *lAuxBusca = buscaListaArvore(l, a->simbolo), *lAux;
     if(!ehVazioNoAlfabeto(lAuxBusca)){
         lAuxBusca->arvore->frequencia ++;
-        if(!ehVazioNoAlfabeto(lAuxBusca->prox)) {
-            lAux = l;
-            while (lAux->prox != lAuxBusca)
-                lAux = lAux->prox;
-            // Agora temos 3 nós do Alfabeto, l é a cabeça, lAuxBusca é onde está o nó para reorganizar o alfabeto, e lAux é o anterior de lAuxBusca.
-            if (lAuxBusca->arvore->frequencia > lAuxBusca->prox->arvore->frequencia){
-                lAuxBusca = retiraCabecaListaAlfabeto(lAuxBusca);
-                lAuxBusca->prox = insereAlfabeto(lAuxBusca->prox, a);
-                lAux->prox = lAuxBusca;
-            }
-        }
+        l = organizaAlfabeto(l, lAuxBusca);
         return l;
     } else {
-        insereSimboloArvore(lAux->arvore, a->simbolo, a->frequencia);
-        lAux->prox = l; // Muda a cabeça.
-        return lAux;
+        if(!ehVazioNoAlfabeto(l) && a->frequencia > l->arvore->frequencia) {
+            lAux = l;
+            lAux->prox = insereAlfabeto(lAux->prox, a);
+            return l;
+        } else {
+            lAux = criaNoAlfabeto();
+            lAux->arvore = insereSimboloArvore(a);
+            lAux->prox = l; // Muda a cabeça.
+            return lAux;
+        }
     }
 }
 
-struct noListaAlfabeto * organizaAlfabeto (struct noListaAlfabeto* l){
-    if(!ehVazioNoAlfabeto(l) && !ehVazioNoAlfabeto(l->prox) && l->arvore->frequencia > l->prox->arvore->frequencia){
-        struct noArvore * aAux = criaArvoreSimbolos();
-        insereSimboloArvore(aAux,l->arvore->simbolo,l->arvore->frequencia);
-        l = retiraCabecaListaAlfabeto(l);
-        l->prox = insereAlfabeto(l->prox, aAux);
-        l->prox = organizaAlfabeto(l->prox);
+alfabeto *organizaAlfabeto (alfabeto *lCabeca, alfabeto *l){
+    alfabeto *lAux;
+    arvore *aAux = insereSimboloArvore(l->arvore);
+    if(!ehVazioNoAlfabeto(l->prox) && l->arvore->frequencia > l->prox->arvore->frequencia) {
+        lAux = lCabeca;
+        if (wcscmp(lAux->arvore->simbolo, l->arvore->simbolo) == 0) {// caso o nó ruim esteja na cabeça`
+            lCabeca = insereAlfabeto(l->prox,aAux);
+            free(l->arvore);
+            free(l); //libera o nó do elemento removido
+        } else {
+            while (wcscmp(lAux->prox->arvore->simbolo, l->arvore->simbolo) != 0)
+                lAux = lAux->prox;
+
+            // Agora temos 3 nós do Alfabeto, lCabeca é a cabeça, l é onde está o nó para reorganizar o alfabeto, e lAux é o anterior de l.
+            l = retiraCabecaListaAlfabeto(l);
+            l->prox = insereAlfabeto(l->prox, aAux);
+            lAux->prox = l;
+        }
     }
-    return l;
+    return lCabeca;
 }
 
-struct noListaAlfabeto* retiraCabecaListaAlfabeto(struct noListaAlfabeto* l) {
-    struct noListaAlfabeto * prox = l->prox; // Próximo nó
+alfabeto *retiraCabecaListaAlfabeto(alfabeto *l) {
+    alfabeto *prox = l->prox; // Próximo nó
+    free(l->arvore);
     free(l); //libera o nó do elemento removido
     return prox; // Retorna a nova cabeça
 }
 
-int tamanhoListaArvore(struct noListaAlfabeto* l){
+int tamanhoListaAlfabeto(alfabeto *l){
     if(!ehVazioNoAlfabeto(l))
-        return 1 + tamanhoListaArvore(l->prox);
+        return 1 + tamanhoListaAlfabeto(l->prox);
     return 0;
 }
 
-struct noListaAlfabeto* buscaListaArvore(struct noListaAlfabeto* l, char* buffer){
+alfabeto *buscaListaArvore(alfabeto *l, wchar_t *buffer){
     if (ehVazioNoAlfabeto(l) || ehVaziaArvore(l->arvore))
         return NULL;
-    if (strcmp(l->arvore->simbolo,buffer) == 0)
+    if (wcscmp(l->arvore->simbolo,buffer) == 0)
         return l;
     return buscaListaArvore(l->prox, buffer);
 }
-
 
