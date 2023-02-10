@@ -18,6 +18,14 @@ ListaAresta *criaListaAresta(){
     return lAux;
 }
 
+ListaVerticesAdjacentes **criaListaVerticesAdjacentes(int numVertices){
+    ListaVerticesAdjacentes **lAux = malloc(numVertices * sizeof (ListaVerticesAdjacentes *));
+    for (int i = 0; i < numVertices; ++i) {
+        lAux[i] = NULL;
+    }
+    return lAux;
+}
+
 ListaAresta *insereListaAresta(ListaAresta *l, unsigned int u, unsigned int v, int peso){
     ListaAresta *lAux = criaListaAresta();
     lAux->peso = peso;
@@ -27,9 +35,33 @@ ListaAresta *insereListaAresta(ListaAresta *l, unsigned int u, unsigned int v, i
     return lAux;
 }
 
-// todo: fazer essa função
-ListaVertices **carregaVertices(Grafo g){
+ListaVerticesAdjacentes *insereVertice(ListaVerticesAdjacentes *l, int i, int peso) {
+    ListaVerticesAdjacentes *lAux = malloc(sizeof (ListaVerticesAdjacentes));
+    lAux->noAdjacente = i;
+    lAux->peso = peso;
+    lAux->prox = l; // muda a cabeça.
+    return lAux;
+}
 
+void carregaVertices(Grafo *g) {
+    g->listaVertices = criaListaVerticesAdjacentes(g->numVertices);
+    ListaAresta *lAux = g->listaArestas;
+    int i;
+
+    while (lAux != NULL) {
+        for (i = 0; i < g->numVertices; ++i) {
+            if(lAux->v == i){
+                if(g->orientacao)
+                    g->listaVertices[lAux->u] = insereVertice(g->listaVertices[lAux->u], lAux->v, lAux->peso);
+                else {
+                    g->listaVertices[lAux->u] = insereVertice(g->listaVertices[lAux->u], lAux->v, lAux->peso);
+                    g->listaVertices[lAux->v] = insereVertice(g->listaVertices[lAux->v], lAux->u, lAux->peso);
+                }
+                break;
+            }
+        }
+        lAux = lAux->prox;
+    }
 }
 
 Grafo * carregaGrafo(FILE *arq) {
@@ -50,7 +82,7 @@ Grafo * carregaGrafo(FILE *arq) {
         gAux->listaArestas = insereListaAresta(gAux->listaArestas,u,v,peso);
     }
 
-//    gAux->listaVertices = carregaVertices(gAux); todo: descomentar
+    carregaVertices(gAux);
 
     return gAux;
 }

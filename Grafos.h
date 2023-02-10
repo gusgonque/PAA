@@ -13,16 +13,17 @@ typedef struct noListaAresta{
     struct noListaAresta *prox;
 } ListaAresta;
 
-typedef struct noListaVertices {
-    int valor;
-    struct noListaVertices *prox;
-} ListaVertices;
+typedef struct noListaVerticesAdjacentes {
+    int noAdjacente; // Valor do nó adjacente.
+    int peso; // Valor do peso do caminho da aresta para esse nó.
+    struct noListaVerticesAdjacentes *prox;
+} ListaVerticesAdjacentes;
 
 typedef struct Grafo {
     int orientacao; // 1 - sim, 0 - não.
     int numVertices;
     ListaAresta *listaArestas; // ponteiro para a lista de listaArestas
-    ListaVertices **listaVertices; // vetor de lista de vértices, cada instância do vetor é um vértice, e os nós da lista em cadeia são os vértices adjacentes desse vértice.
+    ListaVerticesAdjacentes **listaVertices; // vetor de lista de vértices, cada instância do vetor é um vértice, e os nós da lista em cadeia são os vértices adjacentes.
 } Grafo;
 
 // Cria um Grafo vazio.
@@ -31,11 +32,17 @@ Grafo *criaGrafo();
 // Cria uma lista de Arestas vazia.
 ListaAresta *criaListaAresta();
 
+// Cria um vetor de lista de Vertices vazio.
+ListaVerticesAdjacentes **criaListaVerticesAdjacentes(int numVertices);
+
 // Insere os dados de uma aresta, em um novo nó na lista passada como parâmetro. Retorna a nova cabeça da lista.
 ListaAresta *insereListaAresta(ListaAresta *l, unsigned int u, unsigned int v, int peso);
 
+// Insere os dados de um vértice, em um novo nó na lista passada como parâmetro. Retorna a nova cabeça da lista.
+ListaVerticesAdjacentes *insereVertice(ListaVerticesAdjacentes *l, int i, int peso);
+
 // Carrega a lista dos vértices, a partir da lista de arestas do grafo. As listas estarão em ordem crescente.
-ListaVertices **carregaVertices(Grafo g);
+void carregaVertices(Grafo *g);
 
 // Carrega os dados do grafo, a partir do arquivo aberto.
 // Pré-condiçãp: arquivo dado pelo parâmetro arq, aberto.

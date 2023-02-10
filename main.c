@@ -29,7 +29,7 @@ void menuPrincipal(){
 int main() {
     //menuPrincipal();
 
-    FILE *arq = fopen("test.txt","r");
+    FILE *arq = fopen("grafo.txt","r");
     if (arq == NULL)
         printf("Nao foi posivel abrir o arquivo");
 
