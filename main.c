@@ -1,6 +1,4 @@
 #include <stdio.h>
-#include <locale.h>
-#include <wchar.h>
 #include "Grafos.h"
 
 void menuPrincipal(){

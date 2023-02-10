@@ -50,7 +50,7 @@ Grafo * carregaGrafo(FILE *arq) {
         gAux->listaArestas = insereListaAresta(gAux->listaArestas,u,v,peso);
     }
 
-//    gAux->listaVertices = carregaVertices(gAux);
+//    gAux->listaVertices = carregaVertices(gAux); todo: descomentar
 
     return gAux;
 }
