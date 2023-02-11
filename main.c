@@ -1,9 +1,18 @@
 #include <stdio.h>
 #include "Grafos.h"
 
+//Busca em Profundidade a partir de um dado v´ertice de origem
+//2. Busca em Largura a partir de um dado v´ertice de origem
+//3. Dijkstra: dado um v´ertice de origem, calcular os menores caminhos para os demais v´ertices
+//4. Bellman-Ford: dado um v´ertice de origem, calcular os menores caminhos para os demais v´ertices
+//5. Floyd-Warshall: o menor caminho entre todos os pares de v´ertices
+//6. Kruskal: calcular ´arvore geradora m´ınima
+//7. Prim: dado v´ertice inicial, calcular ´arvore geradora m´ınima
+
 void menuPrincipal(){
     wprintf(L"\tTela Principal! Digite a opção desejada:\n");
-    wprintf(L"0 - Finalizar programa.\n");
+    wprintf(L" 1 - Carregar grafo de arquivo.\n");
+    wprintf(L" 0 - Finalizar programa.\n");
     printf(" - ");
     int x;
     scanf("%d",&x);

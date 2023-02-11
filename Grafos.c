@@ -18,8 +18,8 @@ ListaAresta *criaListaAresta(){
     return lAux;
 }
 
-ListaVerticesAdjacentes **criaListaVerticesAdjacentes(int numVertices){
-    ListaVerticesAdjacentes **lAux = malloc(numVertices * sizeof (ListaVerticesAdjacentes *));
+ListaVertices **criaListaVerticesAdjacentes(int numVertices){
+    ListaVertices **lAux = malloc(numVertices * sizeof (ListaVertices *));
     for (int i = 0; i < numVertices; ++i) {
         lAux[i] = NULL;
     }
@@ -35,8 +35,8 @@ ListaAresta *insereListaAresta(ListaAresta *l, unsigned int u, unsigned int v, i
     return lAux;
 }
 
-ListaVerticesAdjacentes *insereVertice(ListaVerticesAdjacentes *l, int i, int peso) {
-    ListaVerticesAdjacentes *lAux = malloc(sizeof (ListaVerticesAdjacentes));
+ListaVertices *insereVertice(ListaVertices *l, int i, int peso) {
+    ListaVertices *lAux = malloc(sizeof (ListaVertices));
     lAux->noAdjacente = i;
     lAux->peso = peso;
     lAux->prox = l; // muda a cabeça.

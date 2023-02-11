@@ -4,7 +4,7 @@
 #include "Grafos.h"
 
 typedef struct GrafoDFS {
-    Grafo *u;
+    Grafo *g;
     char *cor;  // usado para indicar em que etapa se econtra aexploração do vértice
                 // branco: não explorado
                 // cinza: explorado, mas ainda sem explorar os adjacentes
