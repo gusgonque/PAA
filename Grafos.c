@@ -36,11 +36,25 @@ ListaAresta *insereListaAresta(ListaAresta *l, unsigned int u, unsigned int v, i
 }
 
 ListaVertices *insereVertice(ListaVertices *l, int i, int peso) {
-    ListaVertices *lAux = malloc(sizeof (ListaVertices));
-    lAux->noAdjacente = i;
-    lAux->peso = peso;
-    lAux->prox = l; // muda a cabeça.
-    return lAux;
+    if(l!=NULL && i>l->valorNo) {
+        l->prox = insereVertice(l->prox,i,peso);
+        return l;
+    } else {
+        ListaVertices *lAux = malloc(sizeof(ListaVertices));
+        lAux->valorNo = i;
+        lAux->peso = peso;
+        lAux->prox = l; // muda a cabeça.
+        return lAux;
+    }
+}
+
+ListaVertices *removeCabecaListaVertices (ListaVertices *l){
+    if(l != NULL) {
+        ListaVertices *lAux = l->prox;
+        free(l);
+        return lAux;
+    }
+    return l;
 }
 
 void carregaVertices(Grafo *g) {

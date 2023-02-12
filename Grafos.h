@@ -14,7 +14,7 @@ typedef struct noListaAresta{
 } ListaAresta;
 
 typedef struct noListaVertices {
-    int noAdjacente; // Valor do nó/vértice adjacente.
+    int valorNo; // Valor do nó/vértice adjacente.
     int peso; // Valor do peso do caminho da aresta para esse nó.
     struct noListaVertices *prox; // Próximo nó/vértice adjacente.
 } ListaVertices;
@@ -37,6 +37,9 @@ ListaVertices **criaListaVerticesAdjacentes(int numVertices);
 
 // Insere os dados de uma aresta, em um novo nó na lista passada como parâmetro. Retorna a nova cabeça da lista.
 ListaAresta *insereListaAresta(ListaAresta *l, unsigned int u, unsigned int v, int peso);
+
+// Remove a cabeça da lista de vértices, e retorna o próximo nó dessa.
+ListaVertices *removeCabecaListaVertices (ListaVertices *l);
 
 // Insere os dados de um vértice, em um novo nó na lista passada como parâmetro. Retorna a nova cabeça da lista.
 ListaVertices *insereVertice(ListaVertices *l, int i, int peso);

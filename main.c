@@ -1,48 +1,75 @@
 #include <stdio.h>
-#include "Grafos.h"
+#include <locale.h>
+#include "Trab2.h"
 
-//Busca em Profundidade a partir de um dado v´ertice de origem
-//2. Busca em Largura a partir de um dado v´ertice de origem
-//3. Dijkstra: dado um v´ertice de origem, calcular os menores caminhos para os demais v´ertices
-//4. Bellman-Ford: dado um v´ertice de origem, calcular os menores caminhos para os demais v´ertices
-//5. Floyd-Warshall: o menor caminho entre todos os pares de v´ertices
-//6. Kruskal: calcular ´arvore geradora m´ınima
-//7. Prim: dado v´ertice inicial, calcular ´arvore geradora m´ınima
-
-void menuPrincipal(){
+void menuPrincipal(Grafo *g) {
     wprintf(L"\tTela Principal! Digite a opção desejada:\n");
     wprintf(L" 1 - Carregar grafo de arquivo.\n");
+    wprintf(L" 2 - Busca em Profundidade a partir de um dado vértice de origem do grafo.\n");
+    wprintf(L" 3 - Busca em Largura a partir de um dado vértice de origem do grafo.\n");
+    wprintf(L" 4 - Dijkstra: dado um vértice de origem, calcular os menores caminhos para os demais vértices.\n"); // Todo: Dijkstra
+    wprintf(L" 5 - Bellman-Ford: dado um vértice de origem, calcular os menores caminhos para os demais vértices.\n"); // Todo: Bellman-Ford
+    wprintf(L" 6 - Floyd-Warshall: o menor caminho entre todos os pares de vértices.\n"); // Todo: Floyd-Warshall
+    wprintf(L" 7 - Kruskal: calcular árvore geradora mínima.\n"); // Todo: Kruskal
+    wprintf(L" 8 - Prim: dado vértice inicial, calcular árvore geradora mínima.\n"); // Todo: Prim
     wprintf(L" 0 - Finalizar programa.\n");
     printf(" - ");
     int x;
     scanf("%d",&x);
     switch (x) {
         case 1:
-            menuPrincipal();
+            free(g);
+            g = carregaArquivoGrafo();
+            menuPrincipal(g);
             break;
         case 2:
-            menuPrincipal();
+            if(g->numVertices != 0) {
+                wprintf(L" Digite o valor do vértice de origem para busca.\n - ");
+                scanf("%d", &x);
+                DFS(g, x);
+            } else
+                wprintf(L" Grafo não carregado.\n");
+            menuPrincipal(g);
             break;
         case 3:
-            menuPrincipal();
+            if(g->numVertices != 0) {
+                wprintf(L" Digite o valor do vértice de origem para busca.\n - ");
+                scanf("%d", &x);
+                BFS_visit(g,x);
+            } else
+                wprintf(L" Grafo não carregado.\n");
+            menuPrincipal(g);
             break;
         case 4:
-            menuPrincipal();
+            menuPrincipal(g);
+            break;
+        case 5:
+            menuPrincipal(g);
+            break;
+        case 6:
+            menuPrincipal(g);
+            break;
+        case 7:
+            menuPrincipal(g);
+            break;
+        case 8:
+            menuPrincipal(g);
             break;
         case 0:
             return;
+        default:
+            wprintf(L" Opção inválida.\n");
+            menuPrincipal(g);
+            break;
     }
 
 }
 
 int main() {
-    //menuPrincipal();
+    Grafo *g = criaGrafo();
 
-    FILE *arq = fopen("grafo.txt","r");
-    if (arq == NULL)
-        printf("Nao foi posivel abrir o arquivo");
-
-    Grafo *gAux = carregaGrafo(arq);
+    setlocale(LC_ALL,"Portuguese");
+    menuPrincipal(g);
 
     return 0;
 }
