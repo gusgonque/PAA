@@ -1,21 +1,21 @@
 #include "ListaSimples.h"
 
-listaSimples *insereListaSimples(listaSimples *l, wchar_t *simbolo, char *codigo) {
-    listaSimples *aux = (listaSimples*) malloc(sizeof(listaSimples));
-    aux->simbolo = malloc(sizeof(wcslen(simbolo)));
+ListaSimples *insereListaSimples(ListaSimples *l, wchar_t *simbolo, char *codigo) {
+    ListaSimples *aux = (ListaSimples*) malloc(sizeof(ListaSimples));
+    aux->simbolo = malloc(wcslen(simbolo)*sizeof(wchar_t));
     wcscpy(aux->simbolo,simbolo);
-    aux->codigo = malloc(sizeof(strlen(codigo)));
+    aux->codigo = malloc(strlen(codigo)*sizeof(char));
     strcpy(aux->codigo, codigo);
     aux->prox = l; //encadeia com a cabeça da lista
     return aux;// retorna a nova cabeça
 }
 
-int ehVazioListaSimples(listaSimples *l){
+int ehVazioListaSimples(ListaSimples *l){
     return (l==NULL);
 }
 
-listaSimples *buscaListaSimples (listaSimples *l, wchar_t *simbolo) {
-    listaSimples *lAux = l;
+ListaSimples *buscaListaSimples (ListaSimples *l, wchar_t *simbolo) {
+    ListaSimples *lAux = l;
     while (!ehVazioListaSimples(lAux)){
         if(wcscmp(lAux->simbolo,simbolo) == 0)
             return lAux;
@@ -25,7 +25,7 @@ listaSimples *buscaListaSimples (listaSimples *l, wchar_t *simbolo) {
     return NULL;
 }
 
-int tamanhoListaSimple(listaSimples *l){
+int tamanhoListaSimple(ListaSimples *l){
     if(!ehVazioListaSimples(l))
         return 1 + tamanhoListaSimple(l->prox);
     else

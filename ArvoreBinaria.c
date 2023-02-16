@@ -1,7 +1,7 @@
 #include "ArvoreBinaria.h"
 
-arvore *criaArvoreSimbolos(wchar_t *simbolo, int frequencia) {
-    arvore *aAux = (arvore *) malloc(sizeof (arvore));
+Arvore *criaArvoreSimbolos(wchar_t *simbolo, int frequencia) {
+    Arvore *aAux = (Arvore *) malloc(sizeof (Arvore));
     aAux->simbolo = malloc(sizeof (wcslen(simbolo)));
     wcscpy(aAux->simbolo, simbolo);
     aAux->frequencia = frequencia;
@@ -10,18 +10,18 @@ arvore *criaArvoreSimbolos(wchar_t *simbolo, int frequencia) {
     return aAux;
 }
 
-arvore *insereSimboloArvore(arvore *a) {
-    arvore *aAux = criaArvoreSimbolos(a->simbolo, a->frequencia);
+Arvore *insereSimboloArvore(Arvore *a) {
+    Arvore *aAux = criaArvoreSimbolos(a->simbolo, a->frequencia);
     aAux->esq = a->esq;
     aAux->dir = a->dir;
     return aAux;
 }
 
-int ehVaziaArvore(arvore *a) {
+int ehVaziaArvore(Arvore *a) {
     return (a == NULL);
 }
 
-int ehFolha(arvore *a) {
+int ehFolha(Arvore *a) {
     if(ehVaziaArvore(a))
         return 0;
     if(ehVaziaArvore(a->esq) && ehVaziaArvore(a->dir))
@@ -30,7 +30,7 @@ int ehFolha(arvore *a) {
         return 0;
 }
 
-int tamanhoArvore(arvore *a){
+int tamanhoArvore(Arvore *a){
     if(!ehVaziaArvore(a)) {
         int dir = tamanhoArvore(a->dir), esq = tamanhoArvore(a->esq);
         return 1 + (dir > esq ? dir : esq);
