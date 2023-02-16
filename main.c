@@ -13,7 +13,7 @@ void compactarArquivoLetra() {
     alfabeto *lFreq;
     arvore *a;
     listaSimples *lCod = NULL, *lCodAux;
-    char *codigoAux = malloc(sizeof(tamanhoArvore(a)));
+    char *codigoAux;
 
     FILE *arq = _wfopen(wcscat(fileName,L".txt"),L"r, ccs=UTF-8");
 
@@ -24,6 +24,7 @@ void compactarArquivoLetra() {
 
     while ((*buffer=fgetwc(arq)) != WEOF){
         wcscat(buffer,L"\0");
+        wprintf(L"'%ls' ",buffer); // todo.
         a = criaArvoreSimbolos(buffer, 1);
         lFreq = insereAlfabeto(lFreq, a);
         free(a);
@@ -32,6 +33,7 @@ void compactarArquivoLetra() {
     fclose(arq);
 
     a = montaArvore(lFreq);
+    codigoAux = malloc(sizeof(tamanhoArvore(a)));
 
     arq = _wfopen(fileName,L"r, ccs=UTF-8");
 
@@ -90,7 +92,7 @@ void descompactarArquivoLetra() {
     }
 
     int tamLista;
-    fwscanf_s(arq,L"%d\n", &tamLista);
+    fwscanf(arq,L"%d\n", &tamLista);
 
     for (int i = 0; i < tamLista; ++i) {
         if ((*buffer=fgetwc(arq)) != WEOF) {
@@ -140,13 +142,14 @@ void menuPrincipal(){
 int main() {
     system("chcp 65001");
     system("cls");
+
     menuPrincipal();
-    char * buffer = "Olá, mundo! Tudo bem com você? Você parece não estar bem, mundo.";
-    printf("Testando a codificação da frase: '%s', por letras.\n", buffer);
-
-    char * codigo = codificaHuffman(buffer, montaArvore(determinaAlfabeto(buffer, 1)), 1, NULL);
-
-    printf("Resultado = '%s'", codigo);
+//    char * buffer = "Olá, mundo! Tudo bem com você? Você parece não estar bem, mundo.";
+//    printf("Testando a codificação da frase: '%s', por letras.\n", buffer);
+//
+//    char * codigo = codificaHuffman(buffer, montaArvore(determinaAlfabeto(buffer, 1)), 1, NULL);
+//
+//    printf("Resultado = '%s'", codigo);
 
     return 0;
 }
