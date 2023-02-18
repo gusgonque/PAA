@@ -1,5 +1,5 @@
-#ifndef PAA_TRAB1_ARVOREBINARIA_H
-#define PAA_TRAB1_ARVOREBINARIA_H
+#ifndef PAA_ARVOREBINARIA_H
+#define PAA_ARVOREBINARIA_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,13 +11,13 @@ typedef struct noArvore {
     int frequencia;
     struct noArvore *esq; // subárvore esquerda
     struct noArvore *dir; // subárvore direita
-} arvore;
+} Arvore;
 
-// Cria um nó da estrutura arvore, já com um símbolo e frequência.
-arvore *criaArvoreSimbolos(wchar_t *simbolo, int frequencia);
+// Cria um nó da estrutura Arvore, já com um símbolo e frequência.
+Arvore *criaArvoreSimbolos(wchar_t *simbolo, int frequencia);
 
 // Retorna o ponteiro de um novo nó de árvore, uma cópia do parâmetro.
-arvore *insereSimboloArvore(arvore *a);
+Arvore *insereSimboloArvore(Arvore *a);
 
 // Testa se uma árvore é vazia
 // 1 - é vazio
@@ -30,6 +30,6 @@ int ehVaziaArvore(struct noArvore *a);
 int ehFolha(struct noArvore *a);
 
 // Retorna a altura da árvore.
-int tamanhoArvore(arvore *a);
+int tamanhoArvore(Arvore *a);
 
-#endif //PAA_TRAB1_ARVOREBINARIA_H
+#endif //PAA_ARVOREBINARIA_H
