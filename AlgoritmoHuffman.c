@@ -61,7 +61,7 @@ void compactarArquivoLetra() {
     fclose(arq);
 
     a = montaArvoreAlfabeto(lFreq);
-    codigoAux = malloc(sizeof(tamanhoArvore(a)));
+    codigoAux = malloc(tamanhoArvore(a) * sizeof(char));
 
     arq = _wfopen(fileName,L"r, ccs=UTF-8");
 
@@ -92,6 +92,86 @@ void compactarArquivoLetra() {
         wcscat(buffer,L"\0");
         lCodAux = buscaListaSimples(lCod, buffer);
         fwprintf(arq2,L"%s",lCodAux->codigo);
+    }
+
+    fclose(arq);
+    fclose(arq2);
+
+    wprintf(L"Compactação terminada. O arquivo foi salvo como '%ls'\n", fileName2);
+
+}
+
+void compactarArquivoPalavra() {
+    wchar_t *fileName = malloc(50 * sizeof(wchar_t)), *fileName2 = malloc(50 * sizeof(wchar_t));
+    wprintf(L"Digite o nome do arquivo para compactação. Não colocar a extensão. O programa vai considerar um arquivo .txt\n - ");
+    wscanf(L"%ls", fileName);
+    wcscpy(fileName2,fileName);
+
+    wchar_t *buffer = malloc(sizeof (wchar_t));
+    Alfabeto *lFreq;
+    Arvore *a;
+    ListaSimples *lCod = NULL, *lCodAux;
+    char *codigoAux;
+
+    FILE *arq = _wfopen(wcscat(fileName,L".txt"),L"r, ccs=UTF-8");
+
+    if(arq == NULL){
+        wprintf(L"Não foi possível abrir o arquivo para leitura na primeira vez.\n");
+        return;
+    }
+
+    while (feof(arq) == 0){
+        fwscanf(arq,L"%ls",buffer);
+        a = criaArvoreSimbolos(buffer, 1);
+        lFreq = insereAlfabeto(lFreq, a);
+        free(a);
+        if((feof(arq) == 0)) {
+            fgetws(buffer, 2, arq);
+            a = criaArvoreSimbolos(buffer, 1);
+            lFreq = insereAlfabeto(lFreq, a);
+            free(a);
+        }
+    }
+
+    fclose(arq);
+
+    a = montaArvoreAlfabeto(lFreq);
+    codigoAux = malloc(tamanhoArvore(a) * sizeof(char));
+
+    arq = _wfopen(fileName,L"r, ccs=UTF-8");
+
+    if(arq == NULL){
+        wprintf(L"Não foi possível abrir o arquivo para leitura na segunda vez.\n");
+        return;
+    }
+
+    FILE *arq2 = _wfopen(wcscat(fileName2,L"C.txt"),L"w, ccs=UTF-8");
+
+    if(arq2 == NULL){
+        wprintf(L"Não foi possível abrir o arquivo2 para escrita.\n");
+        return;
+    }
+
+    lCod = determinaFrequenciaDFS(a, codigoAux, 0, lCod);
+    lCodAux = lCod;
+
+    int tamLista = tamanhoListaSimple(lCod);
+
+    fwprintf(arq2,L"%d\n",tamLista);
+    while (!ehVazioListaSimples(lCodAux)){
+        fwprintf(arq2,L"%ls\n%s\n",lCodAux->simbolo,lCodAux->codigo);
+        lCodAux = lCodAux->prox;
+    }
+
+    while (feof(arq) == 0){
+        fwscanf(arq,L"%ls",buffer);
+        lCodAux = buscaListaSimples(lCod, buffer);
+        fwprintf(arq2,L"%s",lCodAux->codigo);
+        if((feof(arq) == 0)) {
+            fgetws(buffer, 2, arq);
+            lCodAux = buscaListaSimples(lCod, buffer);
+            fwprintf(arq2,L"%s",lCodAux->codigo);
+        }
     }
 
     fclose(arq);

@@ -19,6 +19,9 @@ ListaSimples *determinaFrequenciaDFS(Arvore *a, char *codigo, int tamCodigo, Lis
 // Compacta um arquivo .txt em outro compactado .txt, com a lista de códigos na árvore, utilizando outras funções.
 void compactarArquivoLetra();
 
+// Compacta um arquivo .txt em outro compactado .txt, com a lista de códigos na árvore, utilizando outras funções.
+void compactarArquivoPalavra();
+
 // Descompacta um arquivo .txt em outro descompactado .txt, com a lista de códigos na árvore, utilizando outras funções.
 void descompactarArquivoLetra();
 

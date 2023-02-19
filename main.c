@@ -22,6 +22,7 @@ void menuPrincipal(){
             menuPrincipal();
             break;
         case 3:
+            compactarArquivoPalavra();
             menuPrincipal();
             break;
         case 4:
