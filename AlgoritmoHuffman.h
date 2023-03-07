@@ -16,6 +16,8 @@ Arvore *montaArvoreAlfabeto(Alfabeto *l);
 // Percorre a árvore utilizando o algoritmo de busca em profundidade (DFS) para obter uma tabela de frequências, no formato de uma lista.
 ListaSimples *determinaFrequenciaDFS(Arvore *a, char *codigo, int tamCodigo, ListaSimples *l);
 
+Alfabeto *pegaListaFreqArqLetra(FILE *arq);
+
 // Compacta um arquivo .txt em outro compactado .txt, com a lista de códigos na árvore, utilizando outras funções.
 void compactarArquivoLetra();
 

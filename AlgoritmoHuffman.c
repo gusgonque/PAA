@@ -32,6 +32,19 @@ ListaSimples *determinaFrequenciaDFS(Arvore *a, char *codigo, int tamCodigo, Lis
     return l;
 }
 
+Alfabeto *pegaListaFreqArqLetra(FILE *arq) {
+    wchar_t *buffer = malloc(sizeof (wchar_t));
+    Arvore *a = NULL;
+    Alfabeto *lFreq = NULL;
+    while ((*buffer=fgetwc(arq)) != WEOF){
+        wcscat(buffer,L"\0");
+        a = criaArvoreSimbolos(buffer, 1);
+        lFreq = insereAlfabeto(lFreq, a);
+        free(a);
+    }
+    return lFreq;
+}
+
 void compactarArquivoLetra() {
     wchar_t *fileName = malloc(50 * sizeof(wchar_t)), *fileName2 = malloc(50 * sizeof(wchar_t));
     wprintf(L"Digite o nome do arquivo para compactação. Não colocar a extensão. O programa vai considerar um arquivo .txt\n - ");
@@ -39,36 +52,25 @@ void compactarArquivoLetra() {
     wcscpy(fileName2,fileName);
 
     wchar_t *buffer = malloc(sizeof (wchar_t));
-    Alfabeto *lFreq;
-    Arvore *a;
+
     ListaSimples *lCod = NULL, *lCodAux;
     char *codigoAux;
 
     FILE *arq = _wfopen(wcscat(fileName,L".txt"),L"r, ccs=UTF-8");
 
     if(arq == NULL){
-        wprintf(L"Não foi possível abrir o arquivo para leitura na primeira vez.\n");
+        wprintf(L"Não foi possível abrir o arquivo para leitura.\n");
         return;
     }
 
-    while ((*buffer=fgetwc(arq)) != WEOF){
-        wcscat(buffer,L"\0");
-        a = criaArvoreSimbolos(buffer, 1);
-        lFreq = insereAlfabeto(lFreq, a);
-        free(a);
-    }
+    Alfabeto *lFreq = pegaListaFreqArqLetra(arq);
 
-    fclose(arq);
-
+    Arvore *a = NULL;
     a = montaArvoreAlfabeto(lFreq);
+
     codigoAux = malloc(tamanhoArvore(a) * sizeof(char));
 
-    arq = _wfopen(fileName,L"r, ccs=UTF-8");
-
-    if(arq == NULL){
-        wprintf(L"Não foi possível abrir o arquivo para leitura na segunda vez.\n");
-        return;
-    }
+    rewind(arq);
 
     FILE *arq2 = _wfopen(wcscat(fileName2,L"C.txt"),L"w, ccs=UTF-8");
 
@@ -108,8 +110,8 @@ void compactarArquivoPalavra() {
     wcscpy(fileName2,fileName);
 
     wchar_t *buffer = malloc(sizeof (wchar_t));
-    Alfabeto *lFreq;
-    Arvore *a;
+    Alfabeto *lFreq = NULL;
+    Arvore *a = NULL;
     ListaSimples *lCod = NULL, *lCodAux;
     char *codigoAux;
 
@@ -219,7 +221,7 @@ void descompactarArquivoLetra() {
     wscanf(L"%ls", fileName);
     wcscpy(fileName2,fileName);
 
-    ListaSimples *lCod;
+    ListaSimples *lCod = NULL;
     wchar_t *buffer = malloc(50 * sizeof(wchar_t));
     char *cod = malloc(50*sizeof (char ));
 

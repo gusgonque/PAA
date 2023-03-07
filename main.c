@@ -8,7 +8,7 @@ void menuPrincipal(){
     wprintf(L"2 - Descompactar arquivo (usando codificação por caracter)\n");
     wprintf(L"3 - Compactar arquivo (usando codificação por palavra)(Não implementado)\n");
     wprintf(L"4 - Descompactar arquivo (usando codificação por palavra)(Não implementado)\n");
-    wprintf(L"5 - Finalizar programa.\n");
+    wprintf(L"0 - Finalizar programa.\n");
     printf(" - ");
     int x;
     scanf("%d",&x);
@@ -28,8 +28,11 @@ void menuPrincipal(){
         case 4:
             menuPrincipal();
             break;
-        case 5:
+        case 0:
             return;
+        default:
+            menuPrincipal();
+            break;
     }
 
 }
