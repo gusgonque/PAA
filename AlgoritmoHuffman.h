@@ -5,18 +5,19 @@
 #include <stdlib.h>
 #include <string.h>
 #include <wchar.h>
-#include "ListaAlfabeto.h"
+#include "ListaFreq.h"
 #include "ListaSimples.h"
 
 // Monta a árvore binária a partir de uma lista, agrupando símbolos conforme a frequência.
 // Pré-condição: parâmetro l de frequência organizada.
 // Pós-condição: parâmetro l não existe mais, retorna a árvore das frequências.
-Arvore *montaArvoreAlfabeto(Alfabeto *l);
+ArvoreFreq *montaAF(ListaFreq *l);
 
 // Percorre a árvore utilizando o algoritmo de busca em profundidade (DFS) para obter uma tabela de frequências, no formato de uma lista.
-ListaSimples *determinaFrequenciaDFS(Arvore *a, char *codigo, int tamCodigo, ListaSimples *l);
+ListaCod *determinaFrequenciaDFS(ArvoreFreq *a, char *codigo, int tamCodigo, ListaCod *l);
 
-Alfabeto *pegaListaFreqArqLetra(FILE *arq);
+// Percorre o arquivo passado como parâmetro, lendo cada caracter e inserindo na lista retornada.
+ListaFreq *pegaListaFreqArqLetra(FILE *arq);
 
 // Compacta um arquivo .txt em outro compactado .txt, com a lista de códigos na árvore, utilizando outras funções.
 void compactarArquivoLetra();

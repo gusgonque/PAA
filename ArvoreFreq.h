@@ -1,5 +1,5 @@
-#ifndef PAA_ARVOREBINARIA_H
-#define PAA_ARVOREBINARIA_H
+#ifndef PAA_ARVOREFREQ_H
+#define PAA_ARVOREFREQ_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,25 +11,25 @@ typedef struct noArvore {
     int frequencia;
     struct noArvore *esq; // subárvore esquerda
     struct noArvore *dir; // subárvore direita
-} Arvore;
+} ArvoreFreq;
 
-// Cria um nó da estrutura Arvore, já com um símbolo e frequência.
-Arvore *criaArvoreSimbolos(wchar_t *simbolo, int frequencia);
+// Cria um nó da estrutura ArvoreFreq, já com um símbolo e frequência.
+ArvoreFreq *criaAF(wchar_t *simbolo, int frequencia);
 
 // Retorna o ponteiro de um novo nó de árvore, uma cópia do parâmetro.
-Arvore *insereSimboloArvore(Arvore *a);
+ArvoreFreq *insereSimboloAF(ArvoreFreq *a);
 
 // Testa se uma árvore é vazia
 // 1 - é vazio
 // 0 - não é vazio
-int ehVaziaArvore(struct noArvore *a);
+int ehVaziaAF(struct noArvore *a);
 
 // Testa se um nó é folha
 // 1 - é folha
 // 0 - não é folha
-int ehFolha(struct noArvore *a);
+int ehFolhaAF(struct noArvore *a);
 
 // Retorna a altura da árvore.
-int tamanhoArvore(Arvore *a);
+int tamanhoAF(ArvoreFreq *a);
 
-#endif //PAA_ARVOREBINARIA_H
+#endif //PAA_ARVOREFREQ_H
