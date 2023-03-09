@@ -5,8 +5,8 @@
 void menuPrincipal(){
     wprintf(L"\tTela Principal! Digite a opção desejada:\n");
     wprintf(L"1 - Compactar arquivo (usando codificação por caracter)\n");
-    wprintf(L"2 - Descompactar arquivo (usando codificação por caracter)\n");
-    wprintf(L"3 - Compactar arquivo (usando codificação por palavra)(Não implementado)\n");
+    wprintf(L"2 - Descompactar arquivo (usando codificação por caracter)(Não implementado)\n");
+    wprintf(L"3 - Compactar arquivo (usando codificação por palavra)\n");
     wprintf(L"4 - Descompactar arquivo (usando codificação por palavra)(Não implementado)\n");
     wprintf(L"0 - Finalizar programa.\n");
     printf(" - ");
@@ -14,7 +14,7 @@ void menuPrincipal(){
     scanf("%d",&x);
     switch (x) {
         case 1:
-            compactarArquivoLetra();
+            compactarArquivo(1);
             menuPrincipal();
             break;
         case 2:
@@ -22,7 +22,7 @@ void menuPrincipal(){
             menuPrincipal();
             break;
         case 3:
-            compactarArquivoPalavra();
+            compactarArquivo(0);
             menuPrincipal();
             break;
         case 4:

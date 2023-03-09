@@ -32,26 +32,78 @@ ListaCod *determinaFrequenciaDFS(ArvoreFreq *a, char *codigo, int tamCodigo, Lis
     return l;
 }
 
-// todo: fazer para palavra
-ListaFreq *pegaListaFreqArqLetra(FILE *arq) {
+// 1 = Letra / 0 = Palavra
+ListaFreq *pegaListaFreqArq(FILE *arq, int tipoCod) {
     wchar_t *buffer = malloc(sizeof (wchar_t));
     ArvoreFreq *a = NULL;
     ListaFreq *lFreq = NULL;
-    while ((*buffer=fgetwc(arq)) != WEOF){
-        wcscat(buffer,L"\0");
-        a = criaAF(buffer, 1);
-        lFreq = insereLF(lFreq, a);
-        free(a);
+    if(tipoCod) {
+        while ((*buffer=fgetwc(arq)) != WEOF){
+            wcscat(buffer,L"\0");
+            a = criaAF(buffer, 1);
+            lFreq = insereLF(lFreq, a);
+            free(a);
+        }
+    } else {
+        while (feof(arq) == 0){
+            fwscanf(arq,L"%ls",buffer);
+            a = criaAF(buffer, 1);
+            lFreq = insereLF(lFreq, a);
+            free(a);
+            if(feof(arq) == 0) {
+                fgetws(buffer, 2, arq);
+                a = criaAF(buffer, 1);
+                lFreq = insereLF(lFreq, a);
+                free(a);
+            }
+        }
     }
     return lFreq;
 }
 
-void compactarArquivoLetra() {
+void escreveListaCodArq(FILE *arq, ListaCod *lCod) {
+    while (!ehVazioLC(lCod)){
+        fwprintf(arq,L"%ls\n%s\n",lCod->simbolo,lCod->codigo);
+        lCod = lCod->prox;
+    }
+}
+
+// 1 = Letra / 0 = Palavra
+void codificaArq(FILE *arq, FILE *arq2, ListaCod *lCod, int tipoCod) {
+
+    ListaCod * lCodAux = NULL;
+    if(tipoCod){
+        wchar_t * buffer = malloc(sizeof (wchar_t));
+        while ((*buffer = fgetwc(arq)) != WEOF) {
+            wcscat(buffer, L"\0");
+            lCodAux = buscaLC(lCod, buffer);
+            fwprintf(arq2, L"%s", lCodAux->codigo);
+        }
+    } else {
+        wchar_t * buffer = malloc(10 * sizeof (wchar_t));
+        while (feof(arq) == 0) {
+            fwscanf(arq, L"%ls", buffer);
+            lCodAux = buscaLC(lCod, buffer);
+            fwprintf(arq2, L"%s", lCodAux->codigo);
+            if ((feof(arq) == 0)) {
+                fgetws(buffer, 2, arq);
+                lCodAux = buscaLC(lCod, buffer);
+                fwprintf(arq2, L"%s", lCodAux->codigo);
+            }
+        }
+    }
+}
+
+// 1 = Letra / 0 = Palavra
+void compactarArquivo(int tipoCod) {
 
     // Parte 1: ler o arquivo para montar a àrvore de frequências.
     wchar_t *fileName = malloc(50 * sizeof(wchar_t));
     wprintf(L"Digite o nome do arquivo para compactação. Não colocar a extensão. O programa vai considerar um arquivo .txt\n - ");
     wscanf(L"%ls", fileName);
+
+    wchar_t *fileName2 = malloc(50 * sizeof(wchar_t));
+    wcscpy(fileName2,fileName);
 
     FILE *arq = _wfopen(wcscat(fileName,L".txt"),L"r, ccs=UTF-8");
 
@@ -61,7 +113,7 @@ void compactarArquivoLetra() {
     }
 
     // Monta a lista de frequência organizada.
-    ListaFreq *lFreq = pegaListaFreqArqLetra(arq);
+    ListaFreq *lFreq = pegaListaFreqArq(arq, tipoCod);
 
     ArvoreFreq *a = NULL;
     // Monta a árvore de frequências, conforme a lista.
@@ -69,9 +121,6 @@ void compactarArquivoLetra() {
 
     // Parte 2: ler o arquivo arq1 para escrever no arq2 as frequências.
     rewind(arq);
-
-    wchar_t *fileName2 = malloc(50 * sizeof(wchar_t));
-    wcscpy(fileName2,fileName);
 
     FILE *arq2 = _wfopen(wcscat(fileName2,L"C.txt"),L"w, ccs=UTF-8");
 
@@ -81,129 +130,46 @@ void compactarArquivoLetra() {
     }
 
     char *codigoAux;
-    codigoAux = malloc(tamanhoAF(a) * sizeof(char));
-    ListaCod *lCod = NULL, *lCodAux;
+    codigoAux = malloc(50*sizeof(char));
+    ListaCod *lCod = NULL, *lCodAux = NULL;
 
     lCod = determinaFrequenciaDFS(a, codigoAux, 0, lCod);
+
     lCodAux = lCod;
 
     int tamLista = tamanhoLC(lCod);
-
     fwprintf(arq2,L"%d\n",tamLista);
-    while (!ehVazioLC(lCodAux)){
-        fwprintf(arq2,L"%ls\n%s\n",lCodAux->simbolo,lCodAux->codigo);
-        lCodAux = lCodAux->prox;
-    }
 
-    wchar_t *buffer = malloc(sizeof (wchar_t));
-    while ((*buffer=fgetwc(arq)) != WEOF){
-        wcscat(buffer,L"\0");
-        lCodAux = buscaLC(lCod, buffer);
-        fwprintf(arq2,L"%s",lCodAux->codigo);
-    }
+    escreveListaCodArq(arq2,lCodAux);
 
-    fclose(arq);
-    fclose(arq2);
+    codificaArq(arq, arq2, lCod, tipoCod);
 
     wprintf(L"Compactação terminada. O arquivo foi salvo como '%ls'\n", fileName2);
 
-}
-
-void compactarArquivoPalavra() {
-    wchar_t *fileName = malloc(50 * sizeof(wchar_t)), *fileName2 = malloc(50 * sizeof(wchar_t));
-    wprintf(L"Digite o nome do arquivo para compactação. Não colocar a extensão. O programa vai considerar um arquivo .txt\n - ");
-    wscanf(L"%ls", fileName);
-    wcscpy(fileName2,fileName);
-
-    wchar_t *buffer = malloc(sizeof (wchar_t));
-    ListaFreq *lFreq = NULL;
-    ArvoreFreq *a = NULL;
-    ListaCod *lCod = NULL, *lCodAux;
-    char *codigoAux;
-
-    FILE *arq = _wfopen(wcscat(fileName,L".txt"),L"r, ccs=UTF-8");
-
-    if(arq == NULL){
-        wprintf(L"Não foi possível abrir o arquivo para leitura na primeira vez.\n");
-        return;
-    }
-
-    while (feof(arq) == 0){
-        fwscanf(arq,L"%ls",buffer);
-        a = criaAF(buffer, 1);
-        lFreq = insereLF(lFreq, a);
-        free(a);
-        if((feof(arq) == 0)) {
-            fgetws(buffer, 2, arq);
-            a = criaAF(buffer, 1);
-            lFreq = insereLF(lFreq, a);
-            free(a);
-        }
-    }
-
-    fclose(arq);
-
-    a = montaAF(lFreq);
-    codigoAux = malloc(tamanhoAF(a) * sizeof(char));
-
-    arq = _wfopen(fileName,L"r, ccs=UTF-8");
-
-    if(arq == NULL){
-        wprintf(L"Não foi possível abrir o arquivo para leitura na segunda vez.\n");
-        return;
-    }
-
-    FILE *arq2 = _wfopen(wcscat(fileName2,L"C.txt"),L"w, ccs=UTF-8");
-
-    if(arq2 == NULL){
-        wprintf(L"Não foi possível abrir o arquivo2 para escrita.\n");
-        return;
-    }
-
-    lCod = determinaFrequenciaDFS(a, codigoAux, 0, lCod);
-    lCodAux = lCod;
-
-    int tamLista = tamanhoLC(lCod);
-
-    fwprintf(arq2,L"%d\n",tamLista);
-    while (!ehVazioLC(lCodAux)){
-        fwprintf(arq2,L"%ls\n%s\n",lCodAux->simbolo,lCodAux->codigo);
-        lCodAux = lCodAux->prox;
-    }
-
-    while (feof(arq) == 0){
-        fwscanf(arq,L"%ls",buffer);
-        lCodAux = buscaLC(lCod, buffer);
-        fwprintf(arq2,L"%s",lCodAux->codigo);
-        if((feof(arq) == 0)) {
-            fgetws(buffer, 2, arq);
-            lCodAux = buscaLC(lCod, buffer);
-            fwprintf(arq2,L"%s",lCodAux->codigo);
-        }
-    }
-
     fclose(arq);
     fclose(arq2);
-
-    wprintf(L"Compactação terminada. O arquivo foi salvo como '%ls'\n", fileName2);
+    free(fileName);
+    free(fileName2);
+    free(a);
+    free(lCod);
 
 }
 
-ArvoreFreq *montaArvoreListaSimplesAux(ArvoreFreq *a, char *codigo, wchar_t *simbolo){
+ArvoreFreq *montaAFdeLCAux(ArvoreFreq *a, char *codigo, wchar_t *simbolo){
     if (*codigo != '\0'){
         if(*codigo == '0'){
             if(!ehVaziaAF(a->esq)){
-                a->esq = montaArvoreListaSimplesAux(a->esq, (codigo+1), simbolo);
+                a->esq = montaAFdeLCAux(a->esq, (codigo + 1), simbolo);
             } else {
                 a->esq = criaAF(L"\n", 0);
-                a->esq = montaArvoreListaSimplesAux(a->esq, (codigo+1), simbolo);
+                a->esq = montaAFdeLCAux(a->esq, (codigo + 1), simbolo);
             }
         } else {
             if(!ehVaziaAF(a->dir)){
-                a->dir = montaArvoreListaSimplesAux(a->dir, (codigo+1), simbolo);
+                a->dir = montaAFdeLCAux(a->dir, (codigo + 1), simbolo);
             } else {
                 a->dir = criaAF(L"\n", 0);
-                a->dir = montaArvoreListaSimplesAux(a->dir, (codigo+1), simbolo);
+                a->dir = montaAFdeLCAux(a->dir, (codigo + 1), simbolo);
             }
         }
     } else
@@ -211,25 +177,26 @@ ArvoreFreq *montaArvoreListaSimplesAux(ArvoreFreq *a, char *codigo, wchar_t *sim
     return a;
 }
 
-ArvoreFreq *montaArvoreListaSimples(ListaCod *l){
+ArvoreFreq *montaAFdeLC(ListaCod *l){
     ArvoreFreq *aAux = criaAF(L"\n", 0);
     ListaCod *lAux = l;
     while (!ehVazioLC(lAux)){
-        aAux = montaArvoreListaSimplesAux(aAux, l->codigo, l->simbolo);
+        aAux = montaAFdeLCAux(aAux, l->codigo, l->simbolo);
         lAux = lAux->prox;
     }
     return aAux;
 }
 
 void descompactarArquivoLetra() {
-    wchar_t *fileName = malloc(50 * sizeof(wchar_t)), *fileName2 = malloc(50 * sizeof(wchar_t));
+    wchar_t *fileName = malloc(50 * sizeof(wchar_t));
     wprintf(L"Digite o nome do arquivo para descompactação. Não colocar a extensão. O programa vai considerar um arquivo .txt\n - ");
     wscanf(L"%ls", fileName);
+
+    wchar_t *fileName2 = malloc(50 * sizeof(wchar_t));
     wcscpy(fileName2,fileName);
 
     ListaCod *lCod = NULL;
     wchar_t *buffer = malloc(50 * sizeof(wchar_t));
-    char *cod = malloc(50*sizeof (char ));
 
     FILE *arq = _wfopen(wcscat(fileName,L".txt"),L"r, ccs=UTF-8");
 
@@ -241,16 +208,21 @@ void descompactarArquivoLetra() {
     int tamLista;
     fwscanf(arq,L"%d\n", &tamLista);
 
+    char *cod = malloc(50*sizeof(char));
+
     for (int i = 0; i < tamLista; ++i) {
         if ((*buffer=fgetwc(arq)) != WEOF) {
             wcscat(buffer,L"\0");
-            fwscanf(arq,L"%*c%[^\n]", cod);
+            fwscanf(arq,L"%*c%s%*c", cod);
             lCod = insereLC(lCod, buffer, cod);
         }
     }
 
-    ArvoreFreq *a = montaArvoreListaSimples(lCod);
+    ArvoreFreq *a = montaAFdeLC(lCod);
     ArvoreFreq *aAux = a;
+
+    free(lCod);
+    free(cod);
 
     FILE *arq2 = _wfopen(wcscat(fileName2,L"D.txt"),L"w, ccs=UTF-8");
 
