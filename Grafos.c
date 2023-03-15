@@ -100,3 +100,5 @@ Grafo * carregaGrafo(FILE *arq) {
 
     return gAux;
 }
+
+

@@ -12,6 +12,7 @@ void menuPrincipal(Grafo *g) {
     wprintf(L" 6 - Floyd-Warshall: o menor caminho entre todos os pares de vértices.\n"); // Todo: Floyd-Warshall
     wprintf(L" 7 - Kruskal: calcular árvore geradora mínima.\n"); // Todo: Kruskal
     wprintf(L" 8 - Prim: dado vértice inicial, calcular árvore geradora mínima.\n"); // Todo: Prim
+    wprintf(L" 9 - Plotar grafo.\n"); // Todo: Plotar grafo
     wprintf(L" 0 - Finalizar programa.\n");
     printf(" - ");
     int x;
