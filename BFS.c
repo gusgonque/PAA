@@ -35,4 +35,8 @@ void BFS_visit(Grafo *g, int s){
         gBFS[s].cor = 'P';
     }
     printf("\n");
+
+    free(gBFS);
+    while (Q != NULL)
+        Q = removeCabecaListaVertices(Q);
 }

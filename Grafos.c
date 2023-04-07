@@ -101,4 +101,13 @@ Grafo * carregaGrafo(FILE *arq) {
     return gAux;
 }
 
-
+int plotaGrafo(Grafo *g){
+    //todo: Função de plotar o grafo
+    Agraph_t* gt = agopen("Grafo", Agstrictdirected, NULL);
+    Agnode_t* node1 = agnode(gt, "Node 1", 1);
+    Agnode_t* node2 = agnode(gt, "Node 2", 1);
+    Agedge_t* edge = agedge(gt, node1, node2, NULL, 1);
+    agwrite(gt, "file1");
+    agclose(gt);
+    return 0;
+}

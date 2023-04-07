@@ -33,10 +33,6 @@ void DFS(Grafo *g, int v) {
         gDFS[i].g = g;
     }
     *t = 0;
-//    for (int i = 0; i < g->numVertices; ++i) {
-//        if(gDFS[i].cor == 'B')
-//            DFS_visit(gDFS[i], t);
-//    }
     DFS_visit(gDFS, v, t);
     printf("\n");
     free(gDFS);

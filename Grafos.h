@@ -6,7 +6,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "graphviz/cgraph.h"
+#include "cgraph.h"
+#include "gvc.h"
 
 typedef struct noListaAresta{
     unsigned int u, v;
@@ -52,15 +53,6 @@ void carregaVertices(Grafo *g);
 // Pré-condiçãp: arquivo dado pelo parâmetro arq, aberto.
 Grafo *carregaGrafo(FILE *arq);
 
-int plotaGrafo(Grafo g){
-    //todo: Função de plotar o grafo
-    Agraph_t* gt = agopen("G", Agstrictdirected, NULL);
-    Agnode_t* node1 = agnode(gt, "Node 1", 1);
-    Agnode_t* node2 = agnode(gt, "Node 2", 1);
-    Agedge_t* edge = agedge(gt, node1, node2, NULL, 1);
-    agwrite(gt, stdout);
-    agclose(gt);
-    return 0;
-}
+int plotaGrafo(Grafo *g);
 
 #endif //PAA_TRAB1_GRAFOS_H

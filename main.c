@@ -56,6 +56,10 @@ void menuPrincipal(Grafo *g) {
         case 8:
             menuPrincipal(g);
             break;
+        case 9:
+            plotaGrafo(g);
+            menuPrincipal(g);
+            break;
         case 0:
             return;
         default:
