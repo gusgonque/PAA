@@ -125,12 +125,14 @@ void plotaGrafo(Grafo *Grafo, char *nomArq){
 
     // Cria as arestas no agraph
     for (ListaAresta* lA = Grafo->listaArestas; lA != NULL; lA = lA->prox) {
-        char nome1[20], nome2[20];
+        char nome1[20], nome2[20], peso[20];
         sprintf(nome1, "%d", lA->u);
         sprintf(nome2, "%d", lA->v);
+        sprintf(peso, "%d", lA->peso);
         Agnode_t* node1 = agnode(g, nome1, 0);
         Agnode_t* node2 = agnode(g, nome2, 0);
-        agedge(g, node1, node2, NULL, 1);
+        Agedge_t *edge = agedge(g, node1, node2, NULL, 1);
+        agsafeset(edge, "label", peso, "");
     }
 
     char *nomArqDot = malloc(50 * sizeof(char));

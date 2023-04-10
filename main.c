@@ -45,6 +45,12 @@ void menuPrincipal(Grafo *g) {
             menuPrincipal(g);
             break;
         case 5:
+            if(g->numVertices != 0 && g->orientacao == 1) {
+                wprintf(L" Digite o valor do vértice de origem para busca.\n - ");
+                scanf("%d", &x);
+                BellmanFord(g, x);
+            } else
+                wprintf(L" Grafo inválido.\n");
             menuPrincipal(g);
             break;
         case 6:

@@ -1,5 +1,5 @@
-#ifndef PAA_TRAB1_BFS_H
-#define PAA_TRAB1_BFS_H
+#ifndef PAA_TRAB2_BFS_H
+#define PAA_TRAB2_BFS_H
 
 #include <stdio.h>
 #include "Grafos.h"
@@ -19,4 +19,4 @@ typedef struct GrafoBFS {
 
 void BFS_visit(Grafo *g, int s);
 
-#endif //PAA_TRAB1_BFS_H
+#endif //PAA_TRAB2_BFS_H

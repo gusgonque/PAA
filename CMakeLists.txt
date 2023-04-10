@@ -7,9 +7,7 @@ set(CMAKE_C_STANDARD 11)
 include_directories("C:/Program Files/Graphviz/include")
 link_directories("C:/Program Files/Graphviz/lib")
 
-add_executable(PAA_Trab1 main.c)
-
-add_executable(main main.c DFS.c DFS.h Grafos.c Grafos.h Trab2.c Trab2.h BFS.c BFS.h)
+add_executable(main main.c DFS.c Grafos.c Trab2.c BFS.c bellmanford.c dijkstra.c FloydWarshall.c)
 
 # Vincule as bibliotecas do Graphviz ao seu programa
 target_link_libraries(main cgraph gvc)

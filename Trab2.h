@@ -5,6 +5,7 @@
 #include "Grafos.h"
 #include "DFS.h"
 #include "BFS.h"
+#include "bellmanford.h"
 
 FILE *abreArquivo (char *fileName, char *mode);
 
