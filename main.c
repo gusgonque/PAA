@@ -57,7 +57,7 @@ void menuPrincipal(Grafo *g) {
             menuPrincipal(g);
             break;
         case 9:
-            plotaGrafo(g);
+            plotaGrafo(g,"Grafo");
             menuPrincipal(g);
             break;
         case 0:

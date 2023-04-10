@@ -6,8 +6,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "cgraph.h"
-#include "gvc.h"
+#include "C:/Program Files/Graphviz/include/graphviz/gvc.h"
+// LEMBRAR DE MUDAR O INCLUDE
 
 typedef struct noListaAresta{
     unsigned int u, v;
@@ -53,6 +53,6 @@ void carregaVertices(Grafo *g);
 // Pré-condiçãp: arquivo dado pelo parâmetro arq, aberto.
 Grafo *carregaGrafo(FILE *arq);
 
-int plotaGrafo(Grafo *g);
+void plotaGrafo(Grafo *Grafo, char *nomArq);
 
 #endif //PAA_TRAB1_GRAFOS_H

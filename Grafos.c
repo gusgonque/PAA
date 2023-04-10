@@ -101,13 +101,60 @@ Grafo * carregaGrafo(FILE *arq) {
     return gAux;
 }
 
-int plotaGrafo(Grafo *g){
-    //todo: Função de plotar o grafo
-    Agraph_t* gt = agopen("Grafo", Agstrictdirected, NULL);
-    Agnode_t* node1 = agnode(gt, "Node 1", 1);
-    Agnode_t* node2 = agnode(gt, "Node 2", 1);
-    Agedge_t* edge = agedge(gt, node1, node2, NULL, 1);
-    agwrite(gt, "file1");
-    agclose(gt);
-    return 0;
+void plotaGrafo(Grafo *Grafo, char *nomArq){
+    if(Grafo->numVertices == 0) {
+        wprintf(L" Grafo não carregado!\n");
+        return;
+    }
+
+    GVC_t *gvc;
+    gvc = gvContext();
+
+    Agraph_t *g;
+    if(Grafo->orientacao)
+        g = agopen("Grafo", Agdirected, NULL);
+    else
+        g = agopen("Grafo", Agundirected, NULL);
+
+    // Cria os nós no agraph
+    for (int i = 0; i < Grafo->numVertices; i++) {
+        char nome[20];
+        sprintf(nome, "%d", i);
+        agnode(g, nome, 1);
+    }
+
+    // Cria as arestas no agraph
+    for (ListaAresta* lA = Grafo->listaArestas; lA != NULL; lA = lA->prox) {
+        char nome1[20], nome2[20];
+        sprintf(nome1, "%d", lA->u);
+        sprintf(nome2, "%d", lA->v);
+        Agnode_t* node1 = agnode(g, nome1, 0);
+        Agnode_t* node2 = agnode(g, nome2, 0);
+        agedge(g, node1, node2, NULL, 1);
+    }
+
+    char *nomArqDot = malloc(50 * sizeof(char));
+    strcpy(nomArqDot, nomArq);
+    strcat(nomArqDot, ".dot");
+
+    char *nomArqPng = malloc(50 * sizeof(char));
+    strcpy(nomArqPng, nomArq);
+    strcat(nomArqPng, ".png");
+
+    gvLayout(gvc, g, "dot");
+    gvRenderFilename(gvc, g, "dot", nomArqDot);
+    gvFreeLayout(gvc, g);
+
+    agclose(g);
+
+    gvFreeContext(gvc);
+
+    char comando[100];
+    sprintf(comando, "dot -Tpng %s -o %s", nomArqDot, nomArqPng);
+    system(comando);
+
+    wprintf(L" Arquivos criados com sucesso, com os nomes '%s' e '%s'!\n\n",nomArqDot,nomArqPng);
+
+    free(nomArqDot);
+    free(nomArqPng);
 }

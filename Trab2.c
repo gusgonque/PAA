@@ -3,7 +3,7 @@
 FILE *abreArquivo (char *fileName, char *mode) {
     FILE *arq = fopen(fileName,mode);
     if(arq == NULL)
-        wprintf(L"Não foi possível abrir o arquivo '%s' no modo '%s'.", fileName, mode);
+        wprintf(L"Não foi possível abrir o arquivo '%s' no modo '%s'.\n", fileName, mode);
     return arq;
 }
 
