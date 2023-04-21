@@ -17,6 +17,7 @@ typedef struct GrafoBFS {
     ListaVertices *adj; // Ponteiro para a lista de vértices adjacentes a esse;
 }GrafoBFS;
 
+// Faz a visita pelo algoritmo BFS
 void BFS_visit(Grafo *g, int s);
 
 #endif //PAA_TRAB2_BFS_H

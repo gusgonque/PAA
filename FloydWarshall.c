@@ -1,5 +1,22 @@
 #include "FloydWarshall.h"
 
+int verificaFloydWarshall(Grafo * grafo) {
+    for (int i = 0; i < grafo->numVertices - 1; i++) {
+        GrafoMenorCaminho **Q = InicializaOrigem(grafo,i);
+        ListaAresta *aresta = grafo->listaArestas;
+        while (aresta != NULL) {
+            int u = aresta->u;
+            int v = aresta->v;
+            int peso = aresta->peso;
+            if (Q[u]->d != INT_MAX && Q[u]->d + peso < Q[v]->d) {
+                wprintf(L"O grafo contém um ciclo negativo. Retornando ao menu anterior.\n");
+                return 0;
+            }
+            aresta = aresta->prox;
+        }
+    }
+}
+
 void floydWarshall(Grafo *grafo) {
     int dist[grafo->numVertices][grafo->numVertices];
     int i, j, k;

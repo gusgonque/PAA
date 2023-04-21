@@ -25,7 +25,7 @@ void menuPrincipal(Grafo *g) {
             break;
         case 2:
             if(g->numVertices != 0) {
-                wprintf(L" Digite o valor do vértice de origem para busca.\n - ");
+                wprintf(L" Digite o v do vértice de origem para busca.\n - ");
                 scanf("%d", &x);
                 DFS(g, x);
             } else
@@ -34,7 +34,7 @@ void menuPrincipal(Grafo *g) {
             break;
         case 3:
             if(g->numVertices != 0) {
-                wprintf(L" Digite o valor do vértice de origem para busca.\n - ");
+                wprintf(L" Digite o v do vértice de origem para busca.\n - ");
                 scanf("%d", &x);
                 BFS_visit(g,x);
             } else
@@ -42,18 +42,28 @@ void menuPrincipal(Grafo *g) {
             menuPrincipal(g);
             break;
         case 4:
+            if(g->numVertices != 0) {
+                wprintf(L" Digite o v do vértice de origem para busca.\n - ");
+                scanf("%d", &x);
+                Dijkstra(g,x);
+            } else
+                wprintf(L" Grafo não carregado.\n");
             menuPrincipal(g);
             break;
         case 5:
-            if(g->numVertices != 0 && g->orientacao == 1) {
-                wprintf(L" Digite o valor do vértice de origem para busca.\n - ");
+            if(g->numVertices != 0) {
+                wprintf(L" Digite o v do vértice de origem para busca.\n - ");
                 scanf("%d", &x);
                 BellmanFord(g, x);
             } else
-                wprintf(L" Grafo inválido.\n");
+                wprintf(L" Grafo não carregado.\n");
             menuPrincipal(g);
             break;
         case 6:
+            if(g->numVertices != 0) {
+                floydWarshall(g);
+            } else
+                wprintf(L" Grafo não carregado.\n");
             menuPrincipal(g);
             break;
         case 7:

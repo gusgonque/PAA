@@ -53,6 +53,7 @@ void carregaVertices(Grafo *g);
 // Pré-condiçãp: arquivo dado pelo parâmetro arq, aberto.
 Grafo *carregaGrafo(FILE *arq);
 
+// Desenha o grafo em um arquivo .dot e .png
 void plotaGrafo(Grafo *Grafo, char *nomArq);
 
 #endif //PAA_TRAB1_GRAFOS_H
